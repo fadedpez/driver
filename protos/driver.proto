@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "github.com/fadedpez/driver/protos;driverapialpha";
+
+service DriverAPI{
+  rpc CreateDriver(CreateDriverRequest) returns (CreateDriverResponse) {}
+}
+
+message Driver {
+  string id = 1;
+  string name = 2;
+}
+
+message CreateDriverRequest {
+  string name = 1;
+}
+
+message CreateDriverResponse {
+  Driver driver = 1;
+}
