@@ -11,12 +11,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/fadedpez/driver/internal/repositories/driver"
+	"github.com/fadedpez/driver/internal/repositories/drivers"
 )
 
 func setupFixture() *Alpha {
 	return &Alpha{
-		driverRepo: &driver.MockRepo{},
+		driverRepo: &drivers.MockRepo{},
 	}
 }
 
@@ -32,12 +32,12 @@ func TestNewAlpha(t *testing.T) {
 
 	})
 
-	t.Run("it requires a driver repo", func(t *testing.T) {
+	t.Run("it requires a drivers repo", func(t *testing.T) {
 		actual, err := NewAlpha(&AlphaConfig{
 			DriverRepo: nil,
 		})
 
-		expError := errors.New("a driver repo is required.")
+		expError := errors.New("a drivers repo is required.")
 
 		assert.Nil(t, actual)
 		assert.NotNil(t, err)
@@ -47,9 +47,9 @@ func TestNewAlpha(t *testing.T) {
 }
 
 func TestAlpha_CreateDriver(t *testing.T) {
-	t.Run("it calls the driver repo correctly", func(t *testing.T) {
+	t.Run("it calls the drivers repo correctly", func(t *testing.T) {
 		handler := setupFixture()
-		m := handler.driverRepo.(*driver.MockRepo)
+		m := handler.driverRepo.(*drivers.MockRepo)
 
 		expDriver := &entities.Driver{
 			Name: "stan",
@@ -79,9 +79,9 @@ func TestAlpha_CreateDriver(t *testing.T) {
 
 	t.Run("it returns an error when the driverRepo errors", func(t *testing.T) {
 		handler := setupFixture()
-		m := handler.driverRepo.(*driver.MockRepo)
+		m := handler.driverRepo.(*drivers.MockRepo)
 
-		expErr := errors.New("mock driver create failed")
+		expErr := errors.New("mock drivers create failed")
 
 		m.On("CreateDriver", mock.Anything).Return(nil, expErr)
 
