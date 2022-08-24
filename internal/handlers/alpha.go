@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/fadedpez/driver/internal/entities"
+
 	"github.com/fadedpez/driver/internal/repositories/driver"
 	driverapialpha "github.com/fadedpez/driver/protos"
 )
@@ -31,5 +33,27 @@ func NewAlpha(cfg *AlphaConfig) (*Alpha, error) {
 }
 
 func (h *Alpha) CreateDriver(ctx context.Context, req *driverapialpha.CreateDriverRequest) (*driverapialpha.CreateDriverResponse, error) {
-	return nil, errors.New("not yet implemented")
+	if req == nil {
+		return nil, errors.New("req is required but not passed in.")
+	}
+
+	if req.Name == "" {
+		return nil, errors.New("name cannot be empty.")
+	}
+
+	driver, err := h.driverRepo.CreateDriver(ctx, &entities.Driver{
+		Name: req.Name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &driverapialpha.CreateDriverResponse{
+		Driver: &driverapialpha.Driver{
+			Id:   driver.ID,
+			Name: driver.Name,
+		},
+	}, nil
+
 }
