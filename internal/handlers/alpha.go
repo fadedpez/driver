@@ -6,16 +6,16 @@ import (
 
 	"github.com/fadedpez/driver/internal/entities"
 
-	"github.com/fadedpez/driver/internal/repositories/driver"
+	"github.com/fadedpez/driver/internal/repositories/drivers"
 	driverapialpha "github.com/fadedpez/driver/protos"
 )
 
 type Alpha struct {
-	driverRepo driver.Repository
+	driverRepo drivers.Repository
 }
 
 type AlphaConfig struct {
-	DriverRepo driver.Repository
+	DriverRepo drivers.Repository
 }
 
 func NewAlpha(cfg *AlphaConfig) (*Alpha, error) {
@@ -24,7 +24,7 @@ func NewAlpha(cfg *AlphaConfig) (*Alpha, error) {
 	}
 
 	if cfg.DriverRepo == nil {
-		return nil, errors.New("a driver repo is required.")
+		return nil, errors.New("a drivers repo is required.")
 	}
 
 	return &Alpha{
