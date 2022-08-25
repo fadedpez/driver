@@ -1,7 +1,12 @@
 package drivers
 
 import (
+	"context"
 	"errors"
+
+	"github.com/KirkDiggler/go-projects/dynamo/inputs/putitem"
+
+	"github.com/fadedpez/driver/internal/entities"
 
 	"github.com/fadedpez/driver/internal/common"
 
@@ -37,4 +42,24 @@ func NewDynamo(cfg *DynamoConfig) (*Dynamo, error) {
 		tableName:     cfg.TableName,
 		uuidGenerator: &common.UUIDGenerator{},
 	}, nil
+}
+
+func (r *Dynamo) CreateDriver(ctx context.Context, driver *entities.Driver) (*entities.Driver, error) {
+	if driver == nil {
+		return nil, errors.New("a driver is required.")
+	}
+
+	if driver.Name == "" {
+		return nil, errors.New("a driver name is required.")
+	}
+
+	driver.ID = r.uuidGenerator.NewUUID()
+
+	_, err := r.client.PutItem(ctx, r.tableName,
+		putitem.WithEntity(driver))
+	if err != nil {
+		return nil, err
+	}
+
+	return driver, nil
 }
