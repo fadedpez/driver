@@ -3,12 +3,15 @@ package drivers
 import (
 	"errors"
 
+	"github.com/fadedpez/driver/internal/common"
+
 	"github.com/KirkDiggler/go-projects/dynamo"
 )
 
 type Dynamo struct {
-	client    dynamo.Interface
-	tableName string
+	client        dynamo.Interface
+	tableName     string
+	uuidGenerator common.UUIDInterface
 }
 
 type DynamoConfig struct {
@@ -30,7 +33,8 @@ func NewDynamo(cfg *DynamoConfig) (*Dynamo, error) {
 	}
 
 	return &Dynamo{
-		client:    cfg.Client,
-		tableName: cfg.TableName,
+		client:        cfg.Client,
+		tableName:     cfg.TableName,
+		uuidGenerator: &common.UUIDGenerator{},
 	}, nil
 }

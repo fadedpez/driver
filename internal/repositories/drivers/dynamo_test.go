@@ -4,10 +4,24 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/fadedpez/driver/internal/common"
+
 	"github.com/KirkDiggler/go-projects/dynamo"
 
 	"github.com/stretchr/testify/assert"
 )
+
+const (
+	testTable = "test_table"
+)
+
+func setupFixture() *Dynamo {
+	return &Dynamo{
+		client:        &dynamo.Mock{},
+		tableName:     testTable,
+		uuidGenerator: &common.MockUUIDGenerator{},
+	}
+}
 
 func TestNewDynamo(t *testing.T) {
 	t.Run("it requires a config", func(t *testing.T) {
@@ -53,6 +67,7 @@ func TestNewDynamo(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, actual)
 		assert.NotNil(t, actual.client)
+		assert.NotNil(t, actual.uuidGenerator)
 		assert.Equal(t, "abc", actual.tableName)
 	})
 }
